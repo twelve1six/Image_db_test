@@ -5,8 +5,13 @@
 	
 	<body>
 		<?php
+		
+			$model = new Model();			
+			$controller = new Controller($model);
+			$view = new View($controller, $model);
+			
 			class Model {
-				public $string;
+				public $text;
 				
 				public function __construct() {
 					$this->text = 'Hello world!';
@@ -17,30 +22,26 @@
 				private $model;
 				private $controller;
 				
-				public function construct(Controller $controller, Model $model) {
+				public function __construct(Controller $controller, Model $model) {
 					$this->controller = $controller;
 					$this->model = $model;
 				}
 				
 				public function output() {
-					return '<h1>' . $this->model->text. '</h1>';
+					return $this->model->text;
 				}
 			}
 			
 			class Controller {
 				private $model;
 				
-				public function construct(Model $model) {
+				public function __construct(Model $model) {
 					$this->model = $model;	
 				}
-			}
-			
-			$model = new Model();
-			
-			$controller = new Controller($model);
-			$view = new View($controller, $model);
-			
+			}		
+
 			echo $view->output();
 		?>
+		
 	</body>
 </html>
