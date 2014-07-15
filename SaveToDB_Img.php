@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<title>Display Image From DB</title>
+		<title>Save Or Display Image From DB</title>
 	</head>
 
 	<body>
@@ -29,6 +29,8 @@
 
 		switch($_GET['mode']) {
 			case 'store' :
+				//Save img into DB
+				
 				//query ready
 				$stmt = $pdo -> prepare("INSERT INTO Gallery (image) VALUES (:image)");
 				
@@ -51,16 +53,37 @@
 								
 				//bind params
 				$stmt -> bindParam(':image', file_get_contents($_FILES['image']['tmp_name']),PDO::PARAM_LOB, 0, PDO::SQLSRV_ENCODING_BINARY);
-							
+										
 				//execute
 				$stmt -> execute();
 				
-				
+			break;
+			
+			case 'retrive' :
 				//Display it from DB
+				$stmt2 = $pdo -> prepare("SELECT image FROM Gallery WHERE id = :id");
 				
-				//$stmt2 -> $pdo -> prepare("SELECT image FROM Gallery WHERE ");
-				
+				//check id
+				//echo $_POST['id']."</br>";
 								
+				$stmt2 -> bindParam(':id', $_POST['id']);				
+				//$stmt2 -> execute(array(':id' => $_POST['id']));
+				
+				//$stmt2 -> bindColumn('image', $id);
+				$stmt2 -> bindColumn(1, $image, PDO::PARAM_LOB);
+				//$stmt2 -> bindColumn(1, $image, PDO::PARAM_LOB, 0, PDO::SQLSRV_ENCODING_BINARY);
+				//$stmt2 -> bindColumn(2, $image, PDO::PARAM_LOB, 0, PDO::SQLSRV_ENCODING_BINARY);
+				
+				while($row = $stmt2 -> fetch(PDO::FETCH_BOUND)) {
+					//echo $image."</br>";
+					// echo $image['type']."</br>";
+					// header('content-type: '.$image['type']);
+					// echo $image['image'],"</br>";	
+					//header('Content-Type: image/jpg');
+					//fpassthru($image);
+					file_put_contents($fname.".jpg", $image);
+					echo "<img src='".$fname.".jpg'> </br>";		
+				}								
 				break;
 		}
 		

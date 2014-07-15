@@ -7,7 +7,12 @@
 	<body>
 		<form enctype="multipart/form-data" action="./SaveToDB_Img.php?mode=store" method="POST">
 			<p> image :	<input type="file" name="image"> </p>
-			<p> <input type="submit" /> </p>			
+			<p> <input type="submit" value="save"/> </p>			
 		</form>		
+		
+		<form action="./SaveToDB_Img.php?mode=retrive" method="POST">
+			<p> id :	<input type="text" name="id"> </p>
+			<p> <input type="submit" value="display" /> </p>			
+		</form>	
 	</body>
 </html>
