@@ -30,7 +30,7 @@
 		switch($_GET['mode']) {
 			case 'store' :
 				//query ready
-				$stmt = $pdo -> prepare("INSERT INTO Gallary (image, des) VALUES (:image, :des)");
+				$stmt = $pdo -> prepare("INSERT INTO Gallery (image) VALUES (:image)");
 				
 				//check file exits
 				//echo $_POST['image']. "</br>";
@@ -39,7 +39,6 @@
 				//set params
 				//$datastring = file_get_contents($_POST['image']);
 				// $image = file_get_contents($_POST['image']);
-				$des = 'default';
 				
 				//check params
 				// echo $image['hex'];;
@@ -52,7 +51,6 @@
 								
 				//bind params
 				$stmt -> bindParam(':image', file_get_contents($_FILES['image']['tmp_name']),PDO::PARAM_LOB, 0, PDO::SQLSRV_ENCODING_BINARY);
-				$stmt -> bindParam(':des', $des);
 							
 				//execute
 				$stmt -> execute();
@@ -60,7 +58,7 @@
 				
 				//Display it from DB
 				
-				$stmt2 -> $pdo -> prepare("INSERT INTO Gallary (image, des) VALUES (:image, :des)");
+				//$stmt2 -> $pdo -> prepare("SELECT image FROM Gallery WHERE ");
 				
 								
 				break;
