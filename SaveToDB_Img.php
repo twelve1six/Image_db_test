@@ -14,7 +14,7 @@
 		//USER & DB info
 		$DB_USERID = "sa";
 		$DB_USERPW = "h890910)";
-		$DB_NAME = "SAFE";
+		$DB_NAME = "PHP_test";
 
 		//$dbh = new PDO('sqlsrv:192.168.0.20,1433', $DB_USERID, $DB_USERPW, array('Database' => "SAFE"));
 		try {
@@ -32,7 +32,7 @@
 				//Save img into DB
 				
 				//query ready
-				$stmt = $pdo -> prepare("INSERT INTO Gallery2 (image, type) VALUES (:image, :type)");
+				$stmt = $pdo -> prepare("INSERT INTO Gallery (image, type) VALUES (:image, :type)");
 				
 				//check file exits
 				//echo $_POST['image']. "</br>";
@@ -65,7 +65,7 @@
 				//Display it from DB
 				try {
 					
-				$stmt2 = $pdo -> prepare("SELECT image, type FROM Gallery2 WHERE id = :id");
+				$stmt2 = $pdo -> prepare("SELECT image, type FROM Gallery WHERE id = :id");
 				
 				//check id
 				//echo $_POST['id']."</br>";
