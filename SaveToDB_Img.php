@@ -7,7 +7,7 @@
 	<body>
 		<?php
 		
-		header("Content-Type: text/html; charset=euc-kr");
+		header("Content-Type: text/html; charset=utf-8");
 		//기본 포트port 1433
 		$serverName = "192.168.0.20,1433";
 		
@@ -32,7 +32,7 @@
 				//Save img into DB
 				
 				//query ready
-				$stmt = $pdo -> prepare("INSERT INTO Gallery (image) VALUES (:image)");
+				$stmt = $pdo -> prepare("INSERT INTO Gallery2 (image, type) VALUES (:image, :type)");
 				
 				//check file exits
 				//echo $_POST['image']. "</br>";
@@ -49,10 +49,12 @@
 				
 				//check type
 				echo "</br>".$_FILES['image']['type'];
-				echo "</br>".file_get_contents($_FILES);				
+				echo "</br>".file_get_contents($_FILES);
+				echo "</br>".$_FILES['image']['size'];			
 								
 				//bind params
 				$stmt -> bindParam(':image', file_get_contents($_FILES['image']['tmp_name']),PDO::PARAM_LOB, 0, PDO::SQLSRV_ENCODING_BINARY);
+				$stmt -> bindParam(':type', $_FILES['image']['type']);	
 										
 				//execute
 				$stmt -> execute();
@@ -61,32 +63,63 @@
 			
 			case 'retrive' :
 				//Display it from DB
-				$stmt2 = $pdo -> prepare("SELECT image FROM Gallery WHERE id = :id");
+				try {
+					
+				$stmt2 = $pdo -> prepare("SELECT image, type FROM Gallery2 WHERE id = :id");
 				
 				//check id
 				//echo $_POST['id']."</br>";
 								
-				$stmt2 -> bindParam(':id', $_POST['id']);				
+				$stmt2 -> bindParam(':id', $_POST['id']);
+				$stmt2 -> execute();				
+				$stmt2 -> bindColumn(1, $image, PDO::PARAM_LOB, 0, PDO::SQLSRV_ENCODING_BINARY);
+				$row = $stmt2 -> fetch(PDO::FETCH_ASSOC);
+				
+				if($row) {
+					//fpassthru($row['image']);					
+					//echo pack('H*',$row['image']);
+					
+					// header('Content-Type: image/jpeg');		
+					// header('Content-Transfer-Encoding: binary'); 
+					// header('Content-Length: 37403');	
+// 								
+					// print $row['image'];	
+					$b64image = base64_encode($row['image']);
+					$type = $row['type'];	
+					
+					echo '<img src="data:'.$type.';base64,'.$b64image.'"/>';								
+				}
+				
+				} catch(PDOException $e) {
+					echo $e->getMessage();
+				}
+				
 				//$stmt2 -> execute(array(':id' => $_POST['id']));
 				
 				//$stmt2 -> bindColumn('image', $id);
-				$stmt2 -> bindColumn(1, $image, PDO::PARAM_LOB);
+				//$stmt2 -> bindColumn(1, $image, PDO::PARAM_LOB);
 				//$stmt2 -> bindColumn(1, $image, PDO::PARAM_LOB, 0, PDO::SQLSRV_ENCODING_BINARY);
 				//$stmt2 -> bindColumn(2, $image, PDO::PARAM_LOB, 0, PDO::SQLSRV_ENCODING_BINARY);
+				// if($row = $stmt2 -> fetch(PDO::FETCH_ASSOC)) {
+					// // echo $row['image'];		
+					// // echo $row['ID'];								
+					// //header('Content-Type: image/jpg');
+					// echo $row['image'];
+				// }
 				
-				while($row = $stmt2 -> fetch(PDO::FETCH_BOUND)) {
+				
+				// while($row = $stmt2 -> fetch(PDO::FETCH_BOUND)) {
 					//echo $image."</br>";
 					// echo $image['type']."</br>";
 					// header('content-type: '.$image['type']);
 					// echo $image['image'],"</br>";	
 					//header('Content-Type: image/jpg');
 					//fpassthru($image);
-					file_put_contents($fname.".jpg", $image);
-					echo "<img src='".$fname.".jpg'> </br>";		
-				}								
+					// file_put_contents($fname.".jpg", $image);
+					// echo "<img src='".$fname.".jpg'> </br>";		
+				// }								
 				break;
-		}
-		
+		}		
 		?>
 	</body>
 </html>
