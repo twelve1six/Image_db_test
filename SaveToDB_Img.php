@@ -78,15 +78,16 @@
 				if($row) {
 					//fpassthru($row['image']);					
 					//echo pack('H*',$row['image']);
+					//if (headers_sent($file, $line)) { echo "Output at $file line $line"; } else { echo "No output"; } 
 					
 					// header('Content-Type: image/jpeg');		
 					// header('Content-Transfer-Encoding: binary'); 
 					// header('Content-Length: 37403');	
-// 								
+// 							
 					// print $row['image'];	
+					
 					$b64image = base64_encode($row['image']);
 					$type = $row['type'];	
-					
 					echo '<img src="data:'.$type.';base64,'.$b64image.'"/>';								
 				}
 				
