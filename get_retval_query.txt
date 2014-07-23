@@ -1,0 +1,4 @@
+DECLARE @retval int
+EXEC @retval = dbo.sp_YQtestA 4
+SELECT 'retval' = @retval
+GO

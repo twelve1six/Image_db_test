@@ -21,36 +21,30 @@
 		} catch (Exception $e) {
 			echo $e -> getMessage();
 		}
-		//$conn = sqlsvr_connect($DB_IP,$DB_USERID,$DB_USERPW);
 
+		//$conn = sqlsvr_connect($DB_IP,$DB_USERID,$DB_USERPW);
 		$retval = null;
 		
+		//have to make a variable to save return value.(retval) 
 		$stmt = $pdo -> prepare("EXEC :retval = dbo.sp_YQtestA 3");
 		$stmt -> bindParam(':retval', $retval ,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT,4);
 		$stmt -> execute();
 
-		// $results = array();
-		
-		// do {
-			// $results [] = $stmt->fetchAll();			
-		// } while ($stmt->nextRowset());
-// 		
-		// print_r($retval);
-// 		
-		// $stmt->closeCursor();
-		// $stmt -> nextRowset();
-
 	    while ($row = $stmt -> fetch()) { 
 		    print_r($row);
 			echo "<br>";
-			echo $retval;
 		}	
 		
+		/*
+		 *simply excute sp cannot get a return value. 
+		 *After 2 nextRowset, can get a return value.		
+		 *Reference: http://social.msdn.microsoft.com/Forums/sqlserver/en-US/aac57e8a-4232-45b1-98c6-83491fc7c49d/pdosqlsrv-having-problems-with-store-procedure-output-parameters-and-recordset?forum=sqldriverforphp
+		*/
 		
-		// $stmt->nextRowset();
-		// $stmt->nextRowset();
-		// $result = $stmt -> fetch(PDO::RETCH_ASSOC);
-		// echo $retval;
+		$stmt->nextRowset();
+		$stmt->nextRowset();
+		
+		echo "return value: ".$retval;
 		
 		unset($pdo);
 		unset($stmt);
