@@ -51,6 +51,7 @@
 					$b64image = base64_encode($row['image']);
 					$type = $row['type'];	
 					
+										
 				}
 		?>
 		
