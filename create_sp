@@ -1,0 +1,15 @@
+USE [PHP_test3]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_test]    Script Date: 07/30/2014 16:45:47 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER proc [dbo].[sp_test] 
+@hname varchar(10)
+AS
+Begin
+DECLARE @count int
+SELECT @count = COUNT(*) from TEST where hname = @hname
+RETURN @count
+END

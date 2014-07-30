@@ -88,6 +88,7 @@
 					
 					$b64image = base64_encode($row['image']);
 					$type = $row['type'];	
+					echo '<img src="data:'.$type.';base64,'.$b64image.'"/>';
 				}
 				
 				} catch(PDOException $e) {
